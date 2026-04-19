@@ -3,29 +3,59 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FY 2026 TTP Workshop — Timer</title>
+<title>FTA FY 2026 Tribal Transit Program Workshop</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
   :root {
-    --forest: #1B4332;
-    --mid-green: #40916C;
-    --light-green: #D8F3DC;
-    --pale: #F0FFF4;
-    --accent: #2D6A4F;
-    --white: #FFFFFF;
-    --dark: #0B1F15;
-    --muted: #74A68E;
-    --warm: #B7E4C7;
-    --break-amber: #F59E0B;
+    /* PostHog-inspired palette */
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F9FAFB;
+    --bg-tertiary: #F2F4F7;
+    --text-primary: #101828;
+    --text-secondary: #6B7280;
+    --text-inverse: #FFFFFF;
+    --border-primary: #E5E7EB;
+    --border-secondary: #D1D5DB;
+
+    /* Semantic / accents */
+    --brand: #1D4ED8;          /* primary blue */
+    --brand-dark: #1E40AF;
+    --brand-soft: #EFF4FF;
+    --success: #059669;
+    --warning: #D97706;
+    --danger: #DC2626;
+    --info: #2563EB;
+    --purple: #7C3AED;
+
+    /* Dark panel (timer side) */
+    --panel-dark: #101828;
+    --panel-dark-2: #1F2937;
+    --panel-muted: #9CA3AF;
+    --panel-warm: #BFDBFE;
+
+    /* Row tints */
     --break-bg: #FFFBEB;
-    --lunch-rose: #F43F5E;
-    --lunch-bg: #FFF1F2;
-    --adjourn-slate: #64748B;
-    --adjourn-bg: #F1F5F9;
-    --story-purple: #8B5CF6;
+    --lunch-bg: #FEF2F2;
+    --adjourn-bg: #F3F4F6;
     --story-bg: #F5F3FF;
-    --timer-glow: rgba(45, 106, 79, 0.15);
+
+    --timer-glow: rgba(29, 78, 216, 0.18);
+
+    /* Legacy aliases (kept so existing rules still resolve) */
+    --forest: var(--text-primary);
+    --mid-green: var(--brand);
+    --light-green: var(--brand-soft);
+    --pale: var(--bg-secondary);
+    --accent: var(--brand-dark);
+    --white: var(--bg-primary);
+    --dark: var(--panel-dark);
+    --muted: var(--panel-muted);
+    --warm: var(--panel-warm);
+    --break-amber: var(--warning);
+    --lunch-rose: var(--danger);
+    --adjourn-slate: var(--text-secondary);
+    --story-purple: var(--purple);
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -265,7 +295,7 @@
     left: -50%;
     width: 200%;
     height: 200%;
-    background: radial-gradient(ellipse at 30% 50%, rgba(64, 145, 108, 0.15) 0%, transparent 60%);
+    background: radial-gradient(ellipse at 30% 50%, rgba(96, 165, 250, 0.18) 0%, transparent 60%);
     pointer-events: none;
   }
 
@@ -564,7 +594,7 @@
   <div class="header">
     <div class="header-left">
       <div class="header-logo"></div>
-      <h1>FY 2026 TTP Workshop<span>FTA Region 10 — All Times Pacific</span></h1>
+      <h1>FTA FY 2026 Tribal Transit Program Workshop<span>Federal Transit Administration · Region 10 · All Times Pacific</span></h1>
     </div>
     <div class="header-right">
       <div class="day-toggle">
@@ -626,8 +656,8 @@
 </div>
 
 <div class="footer-bar">
-  <span>PXM Consulting — Oak Crest Enterprises</span>
-  <span>FTA FY 2026 Tribal Transit Program Workshop</span>
+  <span>U.S. Department of Transportation · Federal Transit Administration</span>
+  <span>FY 2026 Tribal Transit Program Workshop · Region 10</span>
 </div>
 
 <script>
