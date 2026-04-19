@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FY 2026 TTP Workshop — Timer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root {
+    --forest: #1B4332;
+    --mid-green: #40916C;
+    --light-green: #D8F3DC;
+    --pale: #F0FFF4;
+    --accent: #2D6A4F;
+    --white: #FFFFFF;
+    --dark: #0B1F15;
+    --muted: #74A68E;
+    --warm: #B7E4C7;
+    --break-amber: #F59E0B;
+    --break-bg: #FFFBEB;
+    --lunch-rose: #F43F5E;
+    --lunch-bg: #FFF1F2;
+    --adjourn-slate: #64748B;
+    --adjourn-bg: #F1F5F9;
+    --story-purple: #8B5CF6;
+    --story-bg: #F5F3FF;
+    --timer-glow: rgba(45, 106, 79, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--pale);
+    color: var(--forest);
+    overflow: hidden;
+  }
+
+  .app {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    grid-template-rows: auto 1fr;
+    height: 100vh;
+    gap: 0;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    grid-column: 1 / -1;
+    background: var(--forest);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    border-bottom: 3px solid var(--mid-green);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .header-logo {
+    width: 10px;
+    height: 32px;
+    background: var(--mid-green);
+    border-radius: 2px;
+  }
+
+  .header h1 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+
+  .header h1 span {
+    color: var(--warm);
+    font-weight: 400;
+    margin-left: 8px;
+    font-size: 14px;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .day-toggle {
+    display: flex;
+    background: rgba(255,255,255,0.08);
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.12);
+  }
+
+  .day-toggle button {
+    background: none;
+    border: none;
+    color: rgba(255,255,255,0.5);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .day-toggle button.active {
+    background: var(--mid-green);
+    color: var(--white);
+  }
+
+  .day-toggle button:hover:not(.active) {
+    color: rgba(255,255,255,0.8);
+  }
+
+  .live-clock {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--warm);
+    letter-spacing: 0.5px;
+  }
+
+  /* ── AGENDA PANEL ── */
+  .agenda-panel {
+    grid-column: 1;
+    overflow-y: auto;
+    padding: 24px 28px;
+    background: var(--white);
+    scrollbar-width: thin;
+    scrollbar-color: var(--warm) transparent;
+  }
+
+  .agenda-panel::-webkit-scrollbar { width: 6px; }
+  .agenda-panel::-webkit-scrollbar-track { background: transparent; }
+  .agenda-panel::-webkit-scrollbar-thumb { background: var(--warm); border-radius: 3px; }
+
+  .agenda-date {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--mid-green);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--light-green);
+  }
+
+  .session-row {
+    display: grid;
+    grid-template-columns: 90px 1fr 200px;
+    gap: 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    margin-bottom: 4px;
+    transition: all 0.35s ease;
+    cursor: pointer;
+    position: relative;
+    border: 1.5px solid transparent;
+  }
+
+  .session-row:hover {
+    background: var(--pale);
+  }
+
+  .session-row.active {
+    background: var(--light-green);
+    border-color: var(--mid-green);
+    box-shadow: 0 2px 12px var(--timer-glow);
+  }
+
+  .session-row.active .session-time {
+    color: var(--forest);
+    font-weight: 700;
+  }
+
+  .session-row.active .session-topic {
+    font-weight: 600;
+  }
+
+  .session-row.past {
+    opacity: 0.4;
+  }
+
+  .session-row.break-row {
+    background: var(--break-bg);
+    border-color: transparent;
+  }
+  .session-row.break-row .session-topic { color: var(--break-amber); font-weight: 600; }
+  .session-row.break-row.active { border-color: var(--break-amber); }
+
+  .session-row.lunch-row {
+    background: var(--lunch-bg);
+    border-color: transparent;
+  }
+  .session-row.lunch-row .session-topic { color: var(--lunch-rose); font-weight: 600; }
+  .session-row.lunch-row.active { border-color: var(--lunch-rose); }
+
+  .session-row.adjourn-row {
+    background: var(--adjourn-bg);
+    border-color: transparent;
+  }
+  .session-row.adjourn-row .session-topic { color: var(--adjourn-slate); font-weight: 600; }
+
+  .session-row.story-row {
+    background: var(--story-bg);
+    border-color: transparent;
+  }
+  .session-row.story-row .session-topic { color: var(--story-purple); font-weight: 600; }
+  .session-row.story-row.active { border-color: var(--story-purple); }
+
+  .session-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--mid-green);
+    padding-top: 1px;
+  }
+
+  .session-topic {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--forest);
+    line-height: 1.45;
+  }
+
+  .session-topic .sub {
+    display: block;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+    line-height: 1.35;
+  }
+
+  .session-presenter {
+    font-size: 12px;
+    color: var(--muted);
+    text-align: right;
+    padding-top: 2px;
+  }
+
+  /* ── TIMER PANEL ── */
+  .timer-panel {
+    grid-column: 2;
+    background: var(--forest);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .timer-panel::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 30% 50%, rgba(64, 145, 108, 0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .timer-current-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 8px;
+    font-weight: 600;
+    position: relative;
+  }
+
+  .timer-current-topic {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--white);
+    text-align: center;
+    line-height: 1.35;
+    margin-bottom: 6px;
+    max-width: 340px;
+    position: relative;
+  }
+
+  .timer-current-presenter {
+    font-size: 13px;
+    color: var(--warm);
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .timer-display {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 36px;
+  }
+
+  .timer-ring {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+  }
+
+  .timer-ring circle {
+    fill: none;
+    stroke-width: 4;
+  }
+
+  .timer-ring .track {
+    stroke: rgba(255,255,255,0.08);
+  }
+
+  .timer-ring .progress {
+    stroke: var(--mid-green);
+    stroke-linecap: round;
+    transition: stroke-dashoffset 1s linear, stroke 0.5s;
+    transform: rotate(-90deg);
+    transform-origin: center;
+  }
+
+  .timer-ring .progress.warning {
+    stroke: var(--break-amber);
+  }
+
+  .timer-ring .progress.danger {
+    stroke: var(--lunch-rose);
+  }
+
+  .timer-digits {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 64px;
+    font-weight: 700;
+    color: var(--white);
+    letter-spacing: -2px;
+    position: relative;
+    line-height: 1;
+  }
+
+  .timer-digits.warning { color: var(--break-amber); }
+  .timer-digits.danger { color: var(--lunch-rose); }
+
+  .timer-seconds-label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-top: 4px;
+    position: relative;
+  }
+
+  .timer-controls {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  .timer-controls button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 600;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 22px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .btn-start {
+    background: var(--mid-green);
+    color: var(--white);
+  }
+  .btn-start:hover { background: var(--accent); }
+
+  .btn-pause {
+    background: var(--break-amber);
+    color: var(--white);
+  }
+
+  .btn-reset {
+    background: rgba(255,255,255,0.08);
+    color: var(--white);
+    border: 1px solid rgba(255,255,255,0.15) !important;
+  }
+  .btn-reset:hover { background: rgba(255,255,255,0.15); }
+
+  .preset-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    position: relative;
+  }
+
+  .preset-buttons button {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.06);
+    color: var(--warm);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .preset-buttons button:hover {
+    background: rgba(255,255,255,0.12);
+    border-color: var(--mid-green);
+  }
+
+  .preset-buttons button.active-preset {
+    background: var(--mid-green);
+    color: var(--white);
+    border-color: var(--mid-green);
+  }
+
+  .custom-input-row {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    margin-top: 12px;
+    position: relative;
+  }
+
+  .custom-input-row input {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    width: 70px;
+    text-align: center;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 8px;
+    color: var(--white);
+    outline: none;
+  }
+
+  .custom-input-row input:focus {
+    border-color: var(--mid-green);
+  }
+
+  .custom-input-row label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .custom-input-row button {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--mid-green);
+    color: var(--white);
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+
+  /* ── FOOTER ── */
+  .footer-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--dark);
+    color: var(--muted);
+    font-size: 11px;
+    padding: 8px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    letter-spacing: 0.5px;
+    z-index: 10;
+  }
+
+  /* ── UP NEXT ── */
+  .up-next {
+    position: relative;
+    margin-top: 28px;
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    width: 100%;
+    max-width: 340px;
+  }
+
+  .up-next-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+
+  .up-next-topic {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+  }
+
+  .up-next-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 3px;
+  }
+
+  /* Pulse animation for active row indicator */
+  .session-row.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 60%;
+    background: var(--mid-green);
+    border-radius: 0 3px 3px 0;
+    animation: pulse-bar 2s ease-in-out infinite;
+  }
+
+  .session-row.break-row.active::before { background: var(--break-amber); }
+  .session-row.lunch-row.active::before { background: var(--lunch-rose); }
+  .session-row.story-row.active::before { background: var(--story-purple); }
+
+  @keyframes pulse-bar {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* Timer finish flash */
+  @keyframes flash-finish {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .timer-digits.finished {
+    animation: flash-finish 0.8s ease-in-out infinite;
+    color: var(--lunch-rose);
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-left">
+      <div class="header-logo"></div>
+      <h1>FY 2026 TTP Workshop<span>FTA Region 10 — All Times Pacific</span></h1>
+    </div>
+    <div class="header-right">
+      <div class="day-toggle">
+        <button class="active" onclick="showDay(1)">Mon Apr 20</button>
+        <button onclick="showDay(2)">Tue Apr 21</button>
+      </div>
+      <div class="live-clock" id="liveClock">--:-- --</div>
+    </div>
+  </div>
+
+  <!-- AGENDA -->
+  <div class="agenda-panel" id="agendaPanel"></div>
+
+  <!-- TIMER -->
+  <div class="timer-panel">
+    <div class="timer-current-label">CURRENT SESSION</div>
+    <div class="timer-current-topic" id="timerTopic">Select a session</div>
+    <div class="timer-current-presenter" id="timerPresenter">&nbsp;</div>
+
+    <div class="timer-display">
+      <svg class="timer-ring" viewBox="0 0 280 280">
+        <circle class="track" cx="140" cy="140" r="130" />
+        <circle class="progress" id="timerProgress" cx="140" cy="140" r="130"
+          stroke-dasharray="816.81" stroke-dashoffset="0" />
+      </svg>
+      <div>
+        <div class="timer-digits" id="timerDigits">00:00</div>
+        <div class="timer-seconds-label">remaining</div>
+      </div>
+    </div>
+
+    <div class="timer-controls">
+      <button class="btn-start" id="btnStart" onclick="startTimer()">Start</button>
+      <button class="btn-reset" onclick="resetTimer()">Reset</button>
+    </div>
+
+    <div class="preset-buttons" id="presetButtons">
+      <button onclick="setPreset(5, this)">5 min</button>
+      <button onclick="setPreset(10, this)">10 min</button>
+      <button onclick="setPreset(15, this)">15 min</button>
+      <button onclick="setPreset(30, this)">30 min</button>
+      <button onclick="setPreset(45, this)">45 min</button>
+      <button onclick="setPreset(60, this)">60 min</button>
+      <button onclick="setPreset(90, this)">90 min</button>
+    </div>
+
+    <div class="custom-input-row">
+      <label>Custom</label>
+      <input type="number" id="customMin" min="1" max="999" placeholder="min" />
+      <button onclick="setCustom()">Set</button>
+    </div>
+
+    <div class="up-next" id="upNextBlock" style="display:none;">
+      <div class="up-next-label">Up Next</div>
+      <div class="up-next-topic" id="upNextTopic"></div>
+      <div class="up-next-time" id="upNextTime"></div>
+    </div>
+  </div>
+</div>
+
+<div class="footer-bar">
+  <span>PXM Consulting — Oak Crest Enterprises</span>
+  <span>FTA FY 2026 Tribal Transit Program Workshop</span>
+</div>
+
+<script>
+  // ── AGENDA DATA ──
+  const day1 = [
+    { time: '9:00 am',  end: '9:15 am',  topic: 'Greetings from FTA Regional Staff and Contractors', sub: 'Overview of Agenda', presenter: 'Scot Rastelli, FTA Region 10', type: 'session' },
+    { time: '9:15 am',  end: '9:45 am',  topic: 'Introductions from Workshop Participants', sub: 'Name, Title, Tribal Affiliation · Time in Tribal Transit', presenter: 'All', type: 'session' },
+    { time: '9:45 am',  end: '10:15 am', topic: 'FTA TTP Background and Program Overview', sub: 'History and Funding · Formula Calculation · TTP Assessments', presenter: 'Maxine Marshall, Holmes CPAs', type: 'session' },
+    { time: '10:15 am', end: '10:30 am', topic: 'Tribal Transit Success or Transit Impact Story #1', presenter: 'Tribal Member Volunteer', type: 'story' },
+    { time: '10:30 am', end: '10:45 am', topic: 'BREAK', presenter: '', type: 'break' },
+    { time: '10:45 am', end: '12:00 pm', topic: 'TrAMS Training Part 1', presenter: 'Sydney Dratel, FTA Region 10', type: 'session' },
+    { time: '12:00 pm', end: '1:30 pm',  topic: 'LUNCH', presenter: '', type: 'lunch' },
+    { time: '1:30 pm',  end: '2:30 pm',  topic: 'TrAMS Training Part 2', presenter: 'Sydney Dratel, FTA Region 10', type: 'session' },
+    { time: '2:30 pm',  end: '3:00 pm',  topic: 'Period of Availability for FTA Awards', presenter: 'Sydney Dratel, FTA Region 10', type: 'session' },
+    { time: '3:00 pm',  end: '3:15 pm',  topic: 'BREAK', presenter: '', type: 'break' },
+    { time: '3:15 pm',  end: '4:30 pm',  topic: 'ECHO User Training', presenter: 'Abhishek Koirala, FTA Region 10', type: 'session' },
+    { time: '4:30 pm',  end: '',          topic: 'ADJOURN FOR THE DAY', presenter: '', type: 'adjourn' },
+  ];
+
+  const day2 = [
+    { time: '9:00 am',  end: '9:30 am',  topic: 'FTA Procurement Training', presenter: 'Maxine Marshall, Holmes CPAs', type: 'session' },
+    { time: '9:30 am',  end: '10:45 am', topic: 'NRTAP Procurement Pro Training', presenter: 'Al Benedict, National RTAP', type: 'session' },
+    { time: '10:45 am', end: '11:00 am', topic: 'BREAK', presenter: '', type: 'break' },
+    { time: '11:00 am', end: '12:15 pm', topic: 'National Environmental Protection Administration (NEPA) Requirements', presenter: 'Barney Remington, FTA', type: 'session' },
+    { time: '12:15 pm', end: '1:30 pm',  topic: 'LUNCH', presenter: '', type: 'lunch' },
+    { time: '1:30 pm',  end: '2:15 pm',  topic: 'Facilitated Discussion: Disposition', presenter: 'Misti Epps & Karthik Murthy, FTA Region 10', type: 'session' },
+    { time: '2:15 pm',  end: '2:30 pm',  topic: 'Tribal Transit Success or Transit Impact Story #2', presenter: 'Tribal Member Volunteer', type: 'story' },
+    { time: '2:30 pm',  end: '3:00 pm',  topic: 'Wrap Up / General Questions', presenter: 'Sydney Dratel, FTA Region 10', type: 'session' },
+    { time: '3:00 pm',  end: '4:00 pm',  topic: 'Adjourn Workshop · Optional Breakouts', sub: 'Breakout #1: Sydney Dratel · Breakout #2: Danielle Casey', presenter: 'FTA Region 10', type: 'adjourn' },
+  ];
+
+  let currentDay = 1;
+  let activeIndex = -1;
+  let timerInterval = null;
+  let totalSeconds = 0;
+  let remainingSeconds = 0;
+  let isRunning = false;
+
+  function getAgenda() { return currentDay === 1 ? day1 : day2; }
+
+  function showDay(d) {
+    currentDay = d;
+    document.querySelectorAll('.day-toggle button').forEach((b, i) => {
+      b.classList.toggle('active', i === d - 1);
+    });
+    renderAgenda();
+  }
+
+  function renderAgenda() {
+    const panel = document.getElementById('agendaPanel');
+    const agenda = getAgenda();
+    const dateStr = currentDay === 1 ? 'Monday, April 20, 2026' : 'Tuesday, April 21, 2026';
+
+    let html = `<div class="agenda-date">${dateStr}</div>`;
+
+    agenda.forEach((s, i) => {
+      let rowClass = 'session-row';
+      if (s.type === 'break') rowClass += ' break-row';
+      if (s.type === 'lunch') rowClass += ' lunch-row';
+      if (s.type === 'adjourn') rowClass += ' adjourn-row';
+      if (s.type === 'story') rowClass += ' story-row';
+      if (i === activeIndex) rowClass += ' active';
+
+      html += `<div class="${rowClass}" data-index="${i}" onclick="selectSession(${i})">
+        <div class="session-time">${s.time}</div>
+        <div class="session-topic">${s.topic}${s.sub ? `<span class="sub">${s.sub}</span>` : ''}</div>
+        <div class="session-presenter">${s.presenter}</div>
+      </div>`;
+    });
+
+    panel.innerHTML = html;
+
+    // Scroll active into view
+    if (activeIndex >= 0) {
+      const activeEl = panel.querySelector('.session-row.active');
+      if (activeEl) activeEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }
+
+  function selectSession(idx) {
+    activeIndex = idx;
+    const agenda = getAgenda();
+    const s = agenda[idx];
+
+    document.getElementById('timerTopic').textContent = s.topic;
+    document.getElementById('timerPresenter').textContent = s.presenter || '\u00A0';
+
+    // Show up next
+    const upBlock = document.getElementById('upNextBlock');
+    if (idx < agenda.length - 1) {
+      const next = agenda[idx + 1];
+      document.getElementById('upNextTopic').textContent = next.topic;
+      document.getElementById('upNextTime').textContent = next.time;
+      upBlock.style.display = '';
+    } else {
+      upBlock.style.display = 'none';
+    }
+
+    // Auto-calculate duration if both time and end exist
+    if (s.time && s.end) {
+      const dur = calcMinutes(s.time, s.end);
+      if (dur > 0) {
+        totalSeconds = dur * 60;
+        remainingSeconds = totalSeconds;
+        updateTimerDisplay();
+      }
+    }
+
+    renderAgenda();
+  }
+
+  function calcMinutes(start, end) {
+    const toMin = (t) => {
+      const m = t.match(/(\d+):(\d+)\s*(am|pm)/i);
+      if (!m) return 0;
+      let h = parseInt(m[1]);
+      const min = parseInt(m[2]);
+      const ampm = m[3].toLowerCase();
+      if (ampm === 'pm' && h !== 12) h += 12;
+      if (ampm === 'am' && h === 12) h = 0;
+      return h * 60 + min;
+    };
+    return toMin(end) - toMin(start);
+  }
+
+  function setPreset(min, btn) {
+    if (isRunning) stopTimer();
+    totalSeconds = min * 60;
+    remainingSeconds = totalSeconds;
+    updateTimerDisplay();
+
+    document.querySelectorAll('.preset-buttons button').forEach(b => b.classList.remove('active-preset'));
+    if (btn) btn.classList.add('active-preset');
+  }
+
+  function setCustom() {
+    const v = parseInt(document.getElementById('customMin').value);
+    if (v > 0) {
+      if (isRunning) stopTimer();
+      totalSeconds = v * 60;
+      remainingSeconds = totalSeconds;
+      updateTimerDisplay();
+      document.querySelectorAll('.preset-buttons button').forEach(b => b.classList.remove('active-preset'));
+    }
+  }
+
+  function startTimer() {
+    if (remainingSeconds <= 0 && totalSeconds <= 0) return;
+    if (remainingSeconds <= 0) remainingSeconds = totalSeconds;
+
+    const btn = document.getElementById('btnStart');
+
+    if (isRunning) {
+      stopTimer();
+      btn.textContent = 'Resume';
+      btn.className = 'btn-start';
+      return;
+    }
+
+    isRunning = true;
+    btn.textContent = 'Pause';
+    btn.className = 'btn-pause';
+
+    timerInterval = setInterval(() => {
+      remainingSeconds--;
+      if (remainingSeconds <= 0) {
+        remainingSeconds = 0;
+        stopTimer();
+        btn.textContent = 'Start';
+        btn.className = 'btn-start';
+        document.getElementById('timerDigits').classList.add('finished');
+      }
+      updateTimerDisplay();
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+    isRunning = false;
+  }
+
+  function resetTimer() {
+    stopTimer();
+    remainingSeconds = totalSeconds;
+    updateTimerDisplay();
+    const btn = document.getElementById('btnStart');
+    btn.textContent = 'Start';
+    btn.className = 'btn-start';
+    document.getElementById('timerDigits').classList.remove('finished');
+  }
+
+  function updateTimerDisplay() {
+    const min = Math.floor(remainingSeconds / 60);
+    const sec = remainingSeconds % 60;
+    const digits = document.getElementById('timerDigits');
+    const progress = document.getElementById('timerProgress');
+
+    digits.textContent = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+    digits.classList.remove('finished', 'warning', 'danger');
+    progress.classList.remove('warning', 'danger');
+
+    // Ring progress
+    const circ = 2 * Math.PI * 130; // ~816.81
+    const pct = totalSeconds > 0 ? remainingSeconds / totalSeconds : 0;
+    progress.style.strokeDashoffset = circ * (1 - pct);
+
+    // Color thresholds
+    if (totalSeconds > 0) {
+      const pctLeft = remainingSeconds / totalSeconds;
+      if (pctLeft <= 0.1) {
+        digits.classList.add('danger');
+        progress.classList.add('danger');
+      } else if (pctLeft <= 0.25) {
+        digits.classList.add('warning');
+        progress.classList.add('warning');
+      }
+    }
+  }
+
+  // ── LIVE CLOCK ──
+  function updateClock() {
+    const now = new Date();
+    const opts = { hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true, timeZone: 'America/Los_Angeles' };
+    document.getElementById('liveClock').textContent = now.toLocaleTimeString('en-US', opts) + ' PT';
+  }
+
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  // ── INIT ──
+  renderAgenda();
+  updateTimerDisplay();
+</script>
+</body>
+</html>
