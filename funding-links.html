@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Other FTA Funding Opportunities for Tribes — Link Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F9FAFB;
+    --bg-tertiary: #F2F4F7;
+    --text-primary: #101828;
+    --text-secondary: #6B7280;
+    --text-inverse: #FFFFFF;
+    --border-primary: #E5E7EB;
+    --border-secondary: #D1D5DB;
+
+    --brand: #1D4ED8;
+    --brand-dark: #1E40AF;
+    --brand-soft: #EFF4FF;
+    --success: #059669;
+    --warning: #D97706;
+    --danger: #DC2626;
+    --purple: #7C3AED;
+
+    --panel-dark: #101828;
+    --panel-muted: #9CA3AF;
+    --panel-warm: #BFDBFE;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    background: var(--panel-dark);
+    color: var(--text-inverse);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 32px;
+    border-bottom: 2px solid var(--brand);
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header-logo {
+    width: 8px;
+    height: 28px;
+    background: var(--brand);
+    border-radius: 2px;
+  }
+
+  .header h1 {
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+  }
+
+  .header h1 span {
+    color: var(--panel-warm);
+    font-weight: 400;
+    margin-left: 10px;
+    font-size: 13px;
+  }
+
+  .header-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--panel-muted);
+    letter-spacing: 0.3px;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 32px 80px;
+  }
+
+  .page-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    color: var(--brand);
+    margin-bottom: 8px;
+  }
+
+  .page-heading {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+
+  .page-subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.55;
+    max-width: 680px;
+    margin-bottom: 32px;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin: 28px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-primary);
+  }
+
+  .section-number {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--brand);
+    background: var(--brand-soft);
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+  }
+
+  .section-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .link-card {
+    background: var(--bg-primary);
+    border: 1px solid var(--border-primary);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .link-card:hover {
+    border-color: var(--brand);
+    box-shadow: 0 2px 12px rgba(29, 78, 216, 0.08);
+  }
+
+  .link-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 10px;
+  }
+
+  .link-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.35;
+  }
+
+  .link-title .usc {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-left: 8px;
+    background: var(--bg-tertiary);
+    padding: 2px 7px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .link-tag {
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 3px 9px;
+    border-radius: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .tag-formula {
+    background: #ECFDF5;
+    color: var(--success);
+  }
+
+  .tag-competitive {
+    background: #FFF7ED;
+    color: var(--warning);
+  }
+
+  .tag-hub {
+    background: #F5F3FF;
+    color: var(--purple);
+  }
+
+  .link-desc {
+    font-size: 13.5px;
+    color: var(--text-primary);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .link-desc strong {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .link-url {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--brand);
+    text-decoration: none;
+    word-break: break-all;
+    padding: 6px 10px;
+    background: var(--brand-soft);
+    border-radius: 6px;
+    transition: background 0.15s;
+  }
+
+  .link-url:hover {
+    background: #DCE7FD;
+    text-decoration: underline;
+  }
+
+  .link-url::before {
+    content: '→';
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    color: var(--brand);
+  }
+
+  .verify-note {
+    margin-top: 36px;
+    padding: 14px 18px;
+    background: #FFFBEB;
+    border-left: 3px solid var(--warning);
+    border-radius: 4px;
+    font-size: 12.5px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+
+  .verify-note strong {
+    color: var(--warning);
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  .footer-bar {
+    background: var(--panel-dark);
+    color: var(--panel-muted);
+    font-size: 10px;
+    padding: 8px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    letter-spacing: 0.4px;
+  }
+
+  @media (max-width: 680px) {
+    .header { padding: 12px 20px; }
+    .header h1 { font-size: 14px; }
+    .header h1 span { display: block; margin-left: 0; margin-top: 2px; }
+    .content { padding: 24px 20px 60px; }
+    .page-heading { font-size: 22px; }
+    .link-header { flex-direction: column; gap: 8px; }
+    .footer-bar { flex-direction: column; gap: 4px; text-align: center; padding: 10px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="header-logo"></div>
+    <h1>FTA FY 2026 Tribal Transit Program Workshop<span>Federal Transit Administration · Region 10</span></h1>
+  </div>
+  <div class="header-meta">Presentation Links · Slides 11–12</div>
+</div>
+
+<main class="content">
+  <div class="page-title">Reference Document</div>
+  <h1 class="page-heading">Other FTA Funding Opportunities for Tribes</h1>
+  <p class="page-subtitle">
+    Hyperlinks referenced on Slides 11 and 12 of the FTA TTP Presentation (04.20.2026), with a concise description of each program and the governing section of U.S. Code.
+  </p>
+
+  <!-- SLIDE 11 -->
+  <div class="section-header">
+    <span class="section-number">SLIDE 11</span>
+    <span class="section-title">Formula Programs</span>
+  </div>
+
+  <div class="link-card">
+    <div class="link-header">
+      <div class="link-title">
+        Rural Areas Formula Program
+        <span class="usc">49 U.S.C. § 5311</span>
+      </div>
+      <span class="link-tag tag-formula">Formula</span>
+    </div>
+    <p class="link-desc">
+      Formula funding apportioned to states for public transportation in <strong>areas with fewer than 50,000 people</strong>. Supports planning, capital, operating, and administrative costs for rural transit providers. Tribes typically participate as <strong>sub-recipients</strong> of their state DOT's 5311 program, though the separate Tribal Transit Program (Section 5311(c)) is a take-down from this same pot and flows directly to tribes.
+    </p>
+    <a href="https://www.transit.dot.gov/rural-formula-grants-5311" class="link-url" target="_blank" rel="noopener">transit.dot.gov/rural-formula-grants-5311</a>
+  </div>
+
+  <!-- SLIDE 12 -->
+  <div class="section-header">
+    <span class="section-number">SLIDE 12</span>
+    <span class="section-title">Competitive &amp; Discretionary Programs</span>
+  </div>
+
+  <div class="link-card">
+    <div class="link-header">
+      <div class="link-title">
+        Bus and Bus Facilities Competitive Program
+        <span class="usc">49 U.S.C. § 5339(b)</span>
+      </div>
+      <span class="link-tag tag-competitive">Competitive</span>
+    </div>
+    <p class="link-desc">
+      Discretionary, nationally competitive grant for capital projects to <strong>replace, rehabilitate, and purchase buses and related equipment</strong>, and to construct bus-related facilities (maintenance, storage, transfer). Awarded through periodic Notices of Funding Opportunity (NOFOs); tribes are eligible direct applicants. Funds can be combined with other FTA formula awards on the same project.
+    </p>
+    <a href="https://www.transit.dot.gov/bus-program" class="link-url" target="_blank" rel="noopener">transit.dot.gov/bus-program</a>
+  </div>
+
+  <div class="link-card">
+    <div class="link-header">
+      <div class="link-title">
+        Low or No Emission (Low-No) Program
+        <span class="usc">49 U.S.C. § 5339(c)</span>
+      </div>
+      <span class="link-tag tag-competitive">Competitive</span>
+    </div>
+    <p class="link-desc">
+      Competitive grant program funding the purchase or lease of <strong>zero-emission and low-emission transit buses</strong>, along with supporting facilities and infrastructure (charging, fueling, maintenance upgrades). Eligible technologies include battery-electric, hydrogen fuel cell, and hybrid. A required share of each award (currently <strong>5%</strong>) must go to workforce development and training.
+    </p>
+    <a href="https://www.transit.dot.gov/funding/grants/lowno" class="link-url" target="_blank" rel="noopener">transit.dot.gov/funding/grants/lowno</a>
+  </div>
+
+  <div class="link-card">
+    <div class="link-header">
+      <div class="link-title">
+        FTA Funding Opportunities for Tribal Entities — Other Funding
+      </div>
+      <span class="link-tag tag-hub">Resource Hub</span>
+    </div>
+    <p class="link-desc">
+      FTA's consolidated landing page for <strong>tribal-eligible funding programs</strong>. Aggregates active NOFOs, eligibility guidance, application timelines, and links to related discretionary opportunities beyond the Tribal Transit Program — including emergency relief, planning assistance, and cross-cutting competitive grants. The <code>#anchor2</code> deep-links to the "Other Funding" section of that page.
+    </p>
+    <a href="https://www.transit.dot.gov/funding/tribal-entities#anchor2" class="link-url" target="_blank" rel="noopener">transit.dot.gov/funding/tribal-entities#anchor2</a>
+  </div>
+
+  <div class="verify-note">
+    <strong>Pending verification:</strong> Program descriptions to be reviewed by Maxine Marshall (Holmes CPAs) prior to workshop distribution. Statutory citations reflect current law; funding levels and NOFO windows change annually — confirm against the linked FTA pages before citing figures.
+  </div>
+</main>
+
+<div class="footer-bar">
+  <span>U.S. Department of Transportation · Federal Transit Administration</span>
+  <span>FY 2026 Tribal Transit Program Workshop · Region 10</span>
+</div>
+
+</body>
+</html>
