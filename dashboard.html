@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Feedback Dashboard · FTA FY 2026 TTP Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fta-navy: #003366;
+    --fta-blue: #0071BC;
+    --fta-light: #E8F0FE;
+    --fta-white: #FFFFFF;
+    --fta-dark: #1A1A1A;
+    --fta-muted: #5C6670;
+    --fta-border: #D1D5DB;
+    --fta-bg: #F6F8FB;
+    --fta-success: #0A8754;
+    --fta-amber: #D97706;
+    --fta-danger: #B22222;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+    background: var(--fta-bg);
+    color: var(--fta-dark);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ── Header / Footer ── */
+  .bar {
+    background: var(--fta-navy);
+    color: var(--fta-white);
+    font-size: 12px;
+    padding: 10px 20px;
+  }
+  .bar-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .bar-right { opacity: 0.9; }
+
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 20px 48px;
+  }
+
+  .hero {
+    border-bottom: 2px solid var(--fta-navy);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .hero h1 {
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--fta-navy);
+    letter-spacing: -0.01em;
+  }
+  .hero p {
+    font-size: 15px;
+    color: var(--fta-muted);
+    margin-top: 4px;
+  }
+  .hero-meta {
+    font-size: 13px;
+    color: var(--fta-muted);
+  }
+  .hero-meta strong { color: var(--fta-dark); }
+  .live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: var(--fta-success);
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: 1px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ── Stat cards ── */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--fta-white);
+    border: 1px solid var(--fta-border);
+    border-top: 4px solid var(--fta-navy);
+    border-radius: 8px;
+    padding: 18px 20px;
+  }
+  .stat-card.accent-green { border-top-color: var(--fta-success); }
+  .stat-card.accent-amber { border-top-color: var(--fta-amber); }
+  .stat-card.accent-red   { border-top-color: var(--fta-danger); }
+
+  .stat-number {
+    font-size: 34px;
+    font-weight: 700;
+    color: var(--fta-navy);
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+  .stat-label {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fta-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-top: 8px;
+  }
+
+  /* ── Panels ── */
+  .panel {
+    background: var(--fta-white);
+    border: 1px solid var(--fta-border);
+    border-radius: 8px;
+    padding: 22px;
+    margin-bottom: 20px;
+  }
+  .panel h2 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fta-navy);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--fta-border);
+  }
+  .panel .empty-sub {
+    font-size: 14px;
+    color: var(--fta-muted);
+    padding: 8px 0;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  /* ── Bar charts ── */
+  .bar-row {
+    display: grid;
+    grid-template-columns: minmax(160px, 220px) 1fr;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+  .bar-row:last-child { margin-bottom: 0; }
+  .bar-label {
+    color: var(--fta-dark);
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .bar-track {
+    position: relative;
+    background: #F0F3F7;
+    border-radius: 4px;
+    height: 32px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    height: 100%;
+    background: var(--fta-navy);
+    border-radius: 4px;
+    transition: width 0.4s ease;
+    min-width: 2px;
+  }
+  .bar-fill.green { background: var(--fta-success); }
+  .bar-fill.amber { background: var(--fta-amber); }
+  .bar-fill.red   { background: var(--fta-danger); }
+  .bar-value {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--fta-dark);
+    white-space: nowrap;
+  }
+
+  /* ── Stacked bar (Q5) ── */
+  .stacked {
+    display: flex;
+    width: 100%;
+    height: 36px;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--fta-border);
+  }
+  .stacked-seg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--fta-white);
+    font-weight: 600;
+    font-size: 13px;
+    transition: width 0.4s ease;
+  }
+  .stacked-seg.yes { background: var(--fta-success); }
+  .stacked-seg.maybe { background: var(--fta-amber); }
+  .stacked-seg.no { background: var(--fta-danger); }
+  .stacked-legend {
+    display: flex;
+    gap: 16px;
+    margin-top: 10px;
+    font-size: 13px;
+    color: var(--fta-muted);
+    flex-wrap: wrap;
+  }
+  .stacked-legend .sq {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    margin-right: 5px;
+    vertical-align: -1px;
+  }
+  .sq.yes { background: var(--fta-success); }
+  .sq.maybe { background: var(--fta-amber); }
+  .sq.no { background: var(--fta-danger); }
+
+  /* ── Other cards (Q6) ── */
+  .other-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 14px;
+    padding-top: 14px;
+    border-top: 1px dashed var(--fta-border);
+  }
+  .other-list-title {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--fta-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+  }
+  .other-card {
+    padding: 10px 12px;
+    background: var(--fta-light);
+    border-left: 3px solid var(--fta-blue);
+    border-radius: 4px;
+    font-size: 14px;
+  }
+
+  /* ── Open response tabs ── */
+  .tabs {
+    display: flex;
+    border-bottom: 2px solid var(--fta-border);
+    margin-bottom: 18px;
+    gap: 2px;
+  }
+  .tab {
+    padding: 10px 16px;
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid transparent;
+    margin-bottom: -2px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fta-muted);
+    cursor: pointer;
+    transition: color 0.12s, border-color 0.12s;
+  }
+  .tab:hover { color: var(--fta-dark); }
+  .tab.active {
+    color: var(--fta-navy);
+    border-bottom-color: var(--fta-blue);
+  }
+  .tab .count {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 1px 8px;
+    background: var(--fta-light);
+    border-radius: 10px;
+    font-size: 12px;
+    color: var(--fta-navy);
+  }
+  .tab.active .count {
+    background: var(--fta-navy);
+    color: var(--fta-white);
+  }
+
+  .response-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 420px;
+    overflow-y: auto;
+    padding-right: 6px;
+  }
+  .response-card {
+    padding: 12px 14px;
+    background: var(--fta-bg);
+    border: 1px solid var(--fta-border);
+    border-radius: 6px;
+  }
+  .response-text {
+    font-size: 14px;
+    color: var(--fta-dark);
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .response-attr {
+    font-size: 12px;
+    color: var(--fta-muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ── Skeleton / loading ── */
+  .skeleton {
+    background: linear-gradient(90deg, #E5E7EB 0%, #F3F4F6 50%, #E5E7EB 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.4s infinite;
+    border-radius: 4px;
+  }
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+  .skel-stat { height: 34px; width: 60%; margin-bottom: 8px; }
+  .skel-label { height: 12px; width: 80%; }
+  .skel-bar { height: 32px; width: 100%; margin-bottom: 10px; }
+
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--fta-white);
+    border: 1px dashed var(--fta-border);
+    border-radius: 8px;
+    color: var(--fta-muted);
+  }
+  .empty-state h3 {
+    font-size: 18px;
+    color: var(--fta-navy);
+    margin-bottom: 10px;
+  }
+  .empty-state code {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 6px 10px;
+    background: var(--fta-light);
+    border-radius: 4px;
+    font-size: 13px;
+    color: var(--fta-navy);
+  }
+
+  /* ── Mobile ── */
+  @media (max-width: 860px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .grid-2 { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    main { padding: 18px 12px 36px; }
+    .hero h1 { font-size: 22px; }
+    .panel { padding: 16px; }
+    .bar-row { grid-template-columns: 1fr; gap: 4px; }
+    .bar-label { white-space: normal; font-size: 13px; }
+    .stat-number { font-size: 28px; }
+    .tabs { overflow-x: auto; }
+    .tab { white-space: nowrap; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <span>U.S. Department of Transportation · Federal Transit Administration</span>
+    <span class="bar-right">FY 2026 TTP Workshop · Region 10</span>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <div>
+      <h1>Workshop Feedback Dashboard</h1>
+      <p>Results update automatically every 30 seconds.</p>
+    </div>
+    <div class="hero-meta">
+      <span class="live-dot"></span>
+      Last updated: <strong id="last-updated">—</strong>
+    </div>
+  </div>
+
+  <div id="content">
+    <!-- Skeleton while loading -->
+    <div class="stats" id="stats">
+      <div class="stat-card"><div class="skeleton skel-stat"></div><div class="skeleton skel-label"></div></div>
+      <div class="stat-card"><div class="skeleton skel-stat"></div><div class="skeleton skel-label"></div></div>
+      <div class="stat-card"><div class="skeleton skel-stat"></div><div class="skeleton skel-label"></div></div>
+      <div class="stat-card"><div class="skeleton skel-stat"></div><div class="skeleton skel-label"></div></div>
+    </div>
+    <div class="panel">
+      <div class="skeleton skel-bar"></div>
+      <div class="skeleton skel-bar"></div>
+      <div class="skeleton skel-bar"></div>
+    </div>
+  </div>
+</main>
+
+<footer class="bar" style="margin-top:40px;">
+  <div class="bar-inner" style="justify-content:center;text-align:center;">
+    <span>Federal Transit Administration · FY 2026 Tribal Transit Program Workshop · Region 10</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  const SUPABASE_URL = 'https://bbecyvxclqvfybyzfuce.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJiZWN5dnhjbHF2ZnlieXpmdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDA0MTMsImV4cCI6MjA5MjM3NjQxM30.6yuUrrt9y74XxeOKkC6aXs8ECDX-XKo_Pb9OqXCrU4s';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Session keys MUST match survey.html
+  const SESSION_LABELS = {
+    ttp_overview:           'TTP Background & Program Overview',
+    trams:                  'TrAMS Training',
+    period_of_availability: 'Period of Availability for FTA Awards',
+    echo:                   'ECHO User Training',
+    procurement_fta:        'FTA Procurement Training',
+    procurement_nrtap:      'NRTAP Procurement Pro Training',
+    nepa:                   'NEPA Requirements',
+    disposition:            'Facilitated Discussion: Disposition'
+  };
+
+  const Q2_LABELS = {
+    ...SESSION_LABELS,
+    success_stories: 'Tribal Transit Success Stories'
+  };
+
+  const Q4_LABELS = {
+    virtual:       'Virtual',
+    in_person:     'In-person',
+    hybrid:        'Hybrid',
+    no_preference: 'No preference'
+  };
+
+  const Q6_LABELS = {
+    grant_writing:       'Grant writing & applications',
+    financial_mgmt:      'Financial mgmt & closeout',
+    vehicle_procurement: 'Vehicle procurement & fleet',
+    safety_dac:          'Safety & drug/alcohol',
+    ada:                 'ADA compliance',
+    ntd:                 'NTD reporting',
+    electrification:     'Electrification & Low-No',
+    state_dots:          'Coordinating with state DOTs',
+    workforce:           'Workforce development',
+    nemt:                'NEMT',
+    other:               'Other'
+  };
+
+  const REFRESH_MS = 30_000;
+  const content = document.getElementById('content');
+  let activeTab = 'q7';
+
+  // ── Color helpers ──
+  function ratingColor(avg) {
+    if (avg == null) return 'navy';
+    if (avg >= 4.0) return 'green';
+    if (avg >= 3.0) return 'amber';
+    return 'red';
+  }
+  function recColor(pct) {
+    if (pct >= 75) return 'accent-green';
+    if (pct >= 50) return 'accent-amber';
+    return 'accent-red';
+  }
+  function ratingAccent(avg) {
+    if (avg == null) return '';
+    if (avg >= 4.0) return 'accent-green';
+    if (avg >= 3.0) return 'accent-amber';
+    return 'accent-red';
+  }
+  function escapeHtml(s) {
+    if (s == null) return '';
+    return String(s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  // ── Fetch + render ──
+  async function fetchAndRender() {
+    try {
+      const { data, error } = await sb
+        .from('ttp_survey_responses')
+        .select('*')
+        .order('created_at', { ascending: false });
+      if (error) throw error;
+      render(data || []);
+      document.getElementById('last-updated').textContent =
+        new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    } catch (err) {
+      console.error('Dashboard fetch failed:', err);
+      content.innerHTML = `
+        <div class="empty-state">
+          <h3>Couldn't load responses</h3>
+          <p>${escapeHtml(err.message || 'Unknown error')}</p>
+        </div>`;
+    }
+  }
+
+  function render(rows) {
+    if (!rows.length) {
+      content.innerHTML = `
+        <div class="empty-state">
+          <h3>No responses yet</h3>
+          <p>Share the survey link to start collecting feedback.</p>
+          <code>ftaworkshop.vercel.app/survey.html</code>
+        </div>`;
+      return;
+    }
+
+    // ── Aggregates ──
+    const total = rows.length;
+
+    const q1Vals = rows.map(r => r.q1_overall).filter(v => v != null);
+    const avgQ1 = q1Vals.length ? q1Vals.reduce((a, b) => a + b, 0) / q1Vals.length : null;
+
+    const q5Counts = { yes: 0, maybe: 0, no: 0 };
+    rows.forEach(r => { if (r.q5_recommend && q5Counts[r.q5_recommend] != null) q5Counts[r.q5_recommend]++; });
+    const q5Total = q5Counts.yes + q5Counts.maybe + q5Counts.no;
+    const recPct = q5Total ? Math.round((q5Counts.yes / q5Total) * 100) : 0;
+
+    // Session rating aggregation
+    const sessionAgg = {};
+    Object.keys(SESSION_LABELS).forEach(k => { sessionAgg[k] = { sum: 0, count: 0 }; });
+    rows.forEach(r => {
+      if (r.q3_session_ratings && typeof r.q3_session_ratings === 'object') {
+        Object.entries(r.q3_session_ratings).forEach(([k, v]) => {
+          if (sessionAgg[k] && v != null && !isNaN(v)) {
+            sessionAgg[k].sum += v;
+            sessionAgg[k].count += 1;
+          }
+        });
+      }
+    });
+    const sessionAvgs = Object.entries(sessionAgg).map(([k, v]) => ({
+      key: k,
+      label: SESSION_LABELS[k],
+      avg: v.count ? v.sum / v.count : null,
+      count: v.count
+    }));
+    const allSessionRatings = sessionAvgs.filter(s => s.avg != null);
+    const grandSessionAvg = allSessionRatings.length
+      ? allSessionRatings.reduce((a, b) => a + b.avg, 0) / allSessionRatings.length
+      : null;
+
+    // Q2 counts
+    const q2Counts = {};
+    rows.forEach(r => {
+      if (r.q2_most_valuable) q2Counts[r.q2_most_valuable] = (q2Counts[r.q2_most_valuable] || 0) + 1;
+    });
+
+    // Q4 counts
+    const q4Counts = {};
+    rows.forEach(r => {
+      if (r.q4_format) q4Counts[r.q4_format] = (q4Counts[r.q4_format] || 0) + 1;
+    });
+
+    // Q6 counts + other
+    const q6Counts = {};
+    const q6Others = [];
+    rows.forEach(r => {
+      if (Array.isArray(r.q6_future_topics)) {
+        r.q6_future_topics.forEach(t => { q6Counts[t] = (q6Counts[t] || 0) + 1; });
+      }
+      if (r.q6_future_topics_other && r.q6_future_topics_other.trim()) {
+        q6Others.push(r.q6_future_topics_other.trim());
+      }
+    });
+
+    // Open-ended
+    const q7Items = rows.filter(r => r.q7_most_useful && r.q7_most_useful.trim());
+    const q8Items = rows.filter(r => r.q8_improvement && r.q8_improvement.trim());
+    const q9Items = rows.filter(r => r.q9_comments && r.q9_comments.trim());
+
+    // ── HTML ──
+    content.innerHTML = `
+      <div class="stats">
+        <div class="stat-card">
+          <div class="stat-number">${total}</div>
+          <div class="stat-label">Total Responses</div>
+        </div>
+        <div class="stat-card ${ratingAccent(avgQ1)}">
+          <div class="stat-number">${avgQ1 != null ? avgQ1.toFixed(1) + ' / 5' : '—'}</div>
+          <div class="stat-label">Avg Overall Rating</div>
+        </div>
+        <div class="stat-card ${q5Total ? recColor(recPct) : ''}">
+          <div class="stat-number">${q5Total ? recPct + '%' : '—'}</div>
+          <div class="stat-label">Would Recommend</div>
+        </div>
+        <div class="stat-card ${ratingAccent(grandSessionAvg)}">
+          <div class="stat-number">${grandSessionAvg != null ? grandSessionAvg.toFixed(1) + ' / 5' : '—'}</div>
+          <div class="stat-label">Avg Session Rating</div>
+        </div>
+      </div>
+
+      ${renderSessionRatings(sessionAvgs)}
+
+      <div class="grid-2">
+        ${renderMostValuable(q2Counts)}
+        ${renderFormat(q4Counts, total)}
+      </div>
+
+      ${renderRecommend(q5Counts, q5Total)}
+
+      ${renderFutureTopics(q6Counts, q6Others)}
+
+      ${renderOpenResponses(q7Items, q8Items, q9Items)}
+    `;
+
+    wireTabs();
+  }
+
+  function renderSessionRatings(sessionAvgs) {
+    const rated = sessionAvgs.filter(s => s.avg != null).sort((a, b) => b.avg - a.avg);
+    const unrated = sessionAvgs.filter(s => s.avg == null);
+    const ordered = [...rated, ...unrated];
+
+    if (!rated.length) {
+      return `<div class="panel"><h2>Session Ratings</h2><div class="empty-sub">No session ratings submitted yet.</div></div>`;
+    }
+
+    const maxAvg = 5;
+    const rows = ordered.map(s => {
+      const pct = s.avg != null ? (s.avg / maxAvg) * 100 : 0;
+      const color = ratingColor(s.avg);
+      const valueText = s.avg != null
+        ? `${s.avg.toFixed(1)} <span style="color:var(--fta-muted);font-weight:500;">(${s.count})</span>`
+        : `<span style="color:var(--fta-muted);font-weight:500;">no ratings</span>`;
+      return `
+        <div class="bar-row">
+          <div class="bar-label" title="${escapeHtml(s.label)}">${escapeHtml(s.label)}</div>
+          <div class="bar-track">
+            <div class="bar-fill ${color}" style="width:${pct}%"></div>
+            <div class="bar-value">${valueText}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    return `<div class="panel"><h2>Session Ratings</h2>${rows}</div>`;
+  }
+
+  function renderMostValuable(counts) {
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) {
+      return `<div class="panel"><h2>Most Valuable Session</h2><div class="empty-sub">No selections yet.</div></div>`;
+    }
+    const max = entries[0][1];
+    const rows = entries.map(([k, c]) => {
+      const label = Q2_LABELS[k] || k;
+      const pct = (c / max) * 100;
+      return `
+        <div class="bar-row">
+          <div class="bar-label" title="${escapeHtml(label)}">${escapeHtml(label)}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${pct}%"></div>
+            <div class="bar-value">${c}</div>
+          </div>
+        </div>`;
+    }).join('');
+    return `<div class="panel"><h2>Most Valuable Session</h2>${rows}</div>`;
+  }
+
+  function renderFormat(counts, total) {
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (!entries.length) {
+      return `<div class="panel"><h2>Workshop Format Preference</h2><div class="empty-sub">No responses yet.</div></div>`;
+    }
+    const sum = entries.reduce((a, [, c]) => a + c, 0);
+    const max = entries[0][1];
+    const rows = entries.map(([k, c]) => {
+      const pct = (c / max) * 100;
+      const shareOfResponses = Math.round((c / sum) * 100);
+      return `
+        <div class="bar-row">
+          <div class="bar-label">${escapeHtml(Q4_LABELS[k] || k)}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${pct}%"></div>
+            <div class="bar-value">${c} (${shareOfResponses}%)</div>
+          </div>
+        </div>`;
+    }).join('');
+    return `<div class="panel"><h2>Workshop Format Preference</h2>${rows}</div>`;
+  }
+
+  function renderRecommend(counts, total) {
+    if (!total) {
+      return `<div class="panel"><h2>Would Recommend</h2><div class="empty-sub">No responses yet.</div></div>`;
+    }
+    const pct = k => total ? (counts[k] / total) * 100 : 0;
+    const seg = (k, cls, label) => {
+      const p = pct(k);
+      if (p === 0) return '';
+      return `<div class="stacked-seg ${cls}" style="width:${p}%" title="${label}: ${counts[k]}">${Math.round(p)}%</div>`;
+    };
+    return `
+      <div class="panel">
+        <h2>Would Recommend</h2>
+        <div class="stacked">
+          ${seg('yes', 'yes', 'Yes')}
+          ${seg('maybe', 'maybe', 'Maybe')}
+          ${seg('no', 'no', 'No')}
+        </div>
+        <div class="stacked-legend">
+          <span><span class="sq yes"></span>Yes (${counts.yes})</span>
+          <span><span class="sq maybe"></span>Maybe (${counts.maybe})</span>
+          <span><span class="sq no"></span>No (${counts.no})</span>
+        </div>
+      </div>`;
+  }
+
+  function renderFutureTopics(counts, others) {
+    const entries = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+    if (!entries.length && !others.length) {
+      return `<div class="panel"><h2>Future Topics Interest</h2><div class="empty-sub">No responses yet.</div></div>`;
+    }
+    const max = entries.length ? entries[0][1] : 1;
+    const rows = entries.map(([k, c]) => {
+      const pct = (c / max) * 100;
+      return `
+        <div class="bar-row">
+          <div class="bar-label">${escapeHtml(Q6_LABELS[k] || k)}</div>
+          <div class="bar-track">
+            <div class="bar-fill" style="width:${pct}%"></div>
+            <div class="bar-value">${c}</div>
+          </div>
+        </div>`;
+    }).join('');
+
+    const otherBlock = others.length ? `
+      <div class="other-list">
+        <div class="other-list-title">"Other" suggestions (${others.length})</div>
+        ${others.map(o => `<div class="other-card">${escapeHtml(o)}</div>`).join('')}
+      </div>` : '';
+
+    return `<div class="panel"><h2>Future Topics Interest</h2>${rows}${otherBlock}</div>`;
+  }
+
+  function renderOpenResponses(q7, q8, q9) {
+    const tabs = [
+      { id: 'q7', label: 'Takeaways', items: q7, field: 'q7_most_useful' },
+      { id: 'q8', label: 'Improvements', items: q8, field: 'q8_improvement' },
+      { id: 'q9', label: 'Comments', items: q9, field: 'q9_comments' }
+    ];
+    const tabBtns = tabs.map(t =>
+      `<button class="tab ${t.id === activeTab ? 'active' : ''}" data-tab="${t.id}">${t.label}<span class="count">${t.items.length}</span></button>`
+    ).join('');
+
+    const panels = tabs.map(t => {
+      const cards = t.items.length
+        ? t.items.map(r => {
+            const text = escapeHtml(r[t.field]);
+            const attr = (r.name || r.tribe_org)
+              ? `<div class="response-attr">— ${escapeHtml([r.name, r.tribe_org].filter(Boolean).join(', '))}</div>`
+              : '';
+            return `<div class="response-card"><div class="response-text">${text}</div>${attr}</div>`;
+          }).join('')
+        : `<div class="empty-sub">No ${t.label.toLowerCase()} submitted yet.</div>`;
+      return `<div class="response-list" data-panel="${t.id}" style="${t.id === activeTab ? '' : 'display:none'}">${cards}</div>`;
+    }).join('');
+
+    return `
+      <div class="panel">
+        <h2>Open Responses</h2>
+        <div class="tabs">${tabBtns}</div>
+        ${panels}
+      </div>`;
+  }
+
+  function wireTabs() {
+    document.querySelectorAll('.tab').forEach(btn => {
+      btn.addEventListener('click', () => {
+        activeTab = btn.dataset.tab;
+        document.querySelectorAll('.tab').forEach(b => b.classList.toggle('active', b === btn));
+        document.querySelectorAll('[data-panel]').forEach(p => {
+          p.style.display = p.dataset.panel === activeTab ? '' : 'none';
+        });
+      });
+    });
+  }
+
+  // ── Kick off ──
+  fetchAndRender();
+  setInterval(fetchAndRender, REFRESH_MS);
+</script>
+</body>
+</html>

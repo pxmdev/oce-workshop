@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workshop Feedback Survey · FTA FY 2026 TTP Workshop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fta-navy: #003366;
+    --fta-blue: #0071BC;
+    --fta-light: #E8F0FE;
+    --fta-white: #FFFFFF;
+    --fta-dark: #1A1A1A;
+    --fta-muted: #5C6670;
+    --fta-border: #D1D5DB;
+    --fta-success: #0A8754;
+    --fta-danger: #B22222;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    font-family: 'Source Sans 3', 'Segoe UI', sans-serif;
+    background: var(--fta-white);
+    color: var(--fta-dark);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a { color: var(--fta-blue); }
+
+  /* ── Header / Footer ── */
+  .bar {
+    background: var(--fta-navy);
+    color: var(--fta-white);
+    font-size: 12px;
+    padding: 10px 20px;
+  }
+  .bar-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .bar-right { opacity: 0.9; }
+
+  /* ── Main container ── */
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 32px 20px 48px;
+  }
+
+  /* ── Hero ── */
+  .hero {
+    border-bottom: 2px solid var(--fta-navy);
+    padding-bottom: 20px;
+    margin-bottom: 28px;
+  }
+  .hero h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--fta-navy);
+    letter-spacing: -0.01em;
+  }
+  .hero p {
+    font-size: 16px;
+    color: var(--fta-muted);
+    margin-top: 8px;
+  }
+
+  /* ── Section ── */
+  section.q-section {
+    background: var(--fta-white);
+    border: 1px solid var(--fta-border);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  section.q-section h2 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--fta-navy);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--fta-border);
+  }
+
+  .question {
+    margin-bottom: 22px;
+  }
+  .question:last-child { margin-bottom: 0; }
+
+  .question-label {
+    display: block;
+    font-weight: 600;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: var(--fta-dark);
+  }
+  .question-label .req {
+    color: var(--fta-danger);
+    margin-left: 3px;
+  }
+  .question-help {
+    display: block;
+    font-size: 14px;
+    color: var(--fta-muted);
+    margin-bottom: 10px;
+  }
+
+  /* ── Text inputs ── */
+  input[type="text"],
+  textarea {
+    width: 100%;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--fta-dark);
+    background: var(--fta-white);
+    border: 1px solid var(--fta-border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  input[type="text"]:focus,
+  textarea:focus {
+    outline: none;
+    border-color: var(--fta-blue);
+    box-shadow: 0 0 0 3px rgba(0, 113, 188, 0.15);
+  }
+  textarea { resize: vertical; min-height: 80px; }
+
+  .field-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* ── 1-5 rating scale (Q1) ── */
+  .rating-scale {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    margin-top: 4px;
+  }
+  .rating-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    padding: 14px 6px;
+    background: var(--fta-white);
+    border: 2px solid var(--fta-border);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.15s;
+    min-height: 72px;
+  }
+  .rating-btn .num {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--fta-navy);
+  }
+  .rating-btn .lbl {
+    font-size: 11px;
+    color: var(--fta-muted);
+    font-weight: 500;
+    text-align: center;
+  }
+  .rating-btn:hover { border-color: var(--fta-blue); background: var(--fta-light); }
+  .rating-btn.selected {
+    background: var(--fta-navy);
+    border-color: var(--fta-navy);
+  }
+  .rating-btn.selected .num,
+  .rating-btn.selected .lbl { color: var(--fta-white); }
+  .rating-scale.error .rating-btn { border-color: var(--fta-danger); }
+
+  /* ── Radio / checkbox cards ── */
+  .option-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .option {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 12px 14px;
+    background: var(--fta-white);
+    border: 1px solid var(--fta-border);
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .option:hover { background: var(--fta-light); border-color: var(--fta-blue); }
+  .option input { margin-top: 3px; accent-color: var(--fta-navy); transform: scale(1.15); }
+  .option.selected { background: var(--fta-light); border-color: var(--fta-blue); }
+  .option-text { font-size: 15px; color: var(--fta-dark); }
+
+  /* ── Pill buttons (Q5 yes/maybe/no) ── */
+  .pill-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .pill {
+    padding: 14px 10px;
+    font-family: inherit;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--fta-navy);
+    background: var(--fta-white);
+    border: 2px solid var(--fta-border);
+    border-radius: 999px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .pill:hover { border-color: var(--fta-blue); background: var(--fta-light); }
+  .pill.selected {
+    background: var(--fta-navy);
+    color: var(--fta-white);
+    border-color: var(--fta-navy);
+  }
+
+  /* ── Per-session rating (Q3) ── */
+  .session-card {
+    padding: 14px;
+    background: var(--fta-white);
+    border: 1px solid var(--fta-border);
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .session-card:last-child { margin-bottom: 0; }
+  .session-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 10px;
+    color: var(--fta-dark);
+  }
+  .session-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  .session-btn {
+    flex: 1;
+    min-width: 42px;
+    padding: 8px 0;
+    background: var(--fta-white);
+    border: 1.5px solid var(--fta-border);
+    border-radius: 6px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fta-navy);
+    cursor: pointer;
+    transition: all 0.12s;
+  }
+  .session-btn:hover { border-color: var(--fta-blue); background: var(--fta-light); }
+  .session-btn.selected {
+    background: var(--fta-navy);
+    color: var(--fta-white);
+    border-color: var(--fta-navy);
+  }
+  .session-btn.na {
+    flex: 1.6;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--fta-muted);
+  }
+  .session-btn.na.selected {
+    background: var(--fta-muted);
+    color: var(--fta-white);
+    border-color: var(--fta-muted);
+  }
+
+  /* ── Other text input (Q6) ── */
+  .other-input {
+    margin-top: 8px;
+    padding-left: 28px;
+  }
+
+  /* ── Submit ── */
+  .submit-wrap {
+    margin-top: 28px;
+  }
+  .error-banner {
+    display: none;
+    padding: 12px 16px;
+    background: #FEE;
+    border: 1px solid var(--fta-danger);
+    border-radius: 6px;
+    color: var(--fta-danger);
+    font-weight: 500;
+    margin-bottom: 14px;
+  }
+  .error-banner.show { display: block; }
+
+  button.submit {
+    width: 100%;
+    padding: 16px 20px;
+    font-family: inherit;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--fta-white);
+    background: var(--fta-navy);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+    letter-spacing: 0.02em;
+  }
+  button.submit:hover:not(:disabled) { background: #002855; }
+  button.submit:disabled {
+    background: var(--fta-muted);
+    cursor: wait;
+  }
+  .spinner {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255,255,255,0.35);
+    border-top-color: var(--fta-white);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-right: 8px;
+    vertical-align: -2px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Confirmation screen ── */
+  .confirmation {
+    display: none;
+    text-align: center;
+    padding: 48px 24px;
+    background: var(--fta-white);
+    border: 1px solid var(--fta-border);
+    border-radius: 8px;
+  }
+  .confirmation.show { display: block; }
+  .check-circle {
+    width: 72px;
+    height: 72px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    background: var(--fta-success);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .check-circle svg {
+    width: 40px;
+    height: 40px;
+    stroke: var(--fta-white);
+    stroke-width: 3.5;
+    fill: none;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .confirmation h2 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--fta-navy);
+    margin-bottom: 10px;
+  }
+  .confirmation p { font-size: 16px; color: var(--fta-dark); margin-bottom: 8px; }
+  .confirmation .muted { font-size: 14px; color: var(--fta-muted); margin-top: 16px; }
+
+  /* ── Mobile ── */
+  @media (max-width: 640px) {
+    main { padding: 20px 14px 36px; }
+    .hero h1 { font-size: 24px; }
+    .hero p { font-size: 15px; }
+    section.q-section { padding: 16px; border-radius: 6px; }
+    .rating-btn { min-height: 64px; padding: 10px 2px; }
+    .rating-btn .num { font-size: 20px; }
+    .rating-btn .lbl { font-size: 10px; }
+    .bar-inner { font-size: 11px; }
+    .pill { font-size: 14px; padding: 12px 6px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="bar-inner">
+    <span>U.S. Department of Transportation · Federal Transit Administration</span>
+    <span class="bar-right">FY 2026 TTP Workshop · Region 10</span>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Workshop Feedback Survey</h1>
+    <p>Help us improve future workshops. All responses are anonymous unless you choose to share your name. Takes about 3 minutes.</p>
+  </div>
+
+  <form id="survey-form" novalidate>
+
+    <!-- About You -->
+    <section class="q-section">
+      <h2>About You</h2>
+      <div class="field-stack">
+        <div class="question">
+          <label class="question-label" for="f-name">Name</label>
+          <input type="text" id="f-name" name="name" placeholder="Optional" autocomplete="name">
+        </div>
+        <div class="question">
+          <label class="question-label" for="f-tribe">Tribe / Organization</label>
+          <input type="text" id="f-tribe" name="tribe_org" placeholder="e.g., Squaxin Island Tribe" autocomplete="organization">
+        </div>
+        <div class="question">
+          <label class="question-label" for="f-role">Role / Title</label>
+          <input type="text" id="f-role" name="role" placeholder="e.g., Transit Coordinator" autocomplete="organization-title">
+        </div>
+      </div>
+    </section>
+
+    <!-- Overall Experience -->
+    <section class="q-section">
+      <h2>Overall Experience</h2>
+
+      <div class="question" id="q1-wrap">
+        <label class="question-label">Q1. How would you rate the workshop overall?<span class="req">*</span></label>
+        <div class="rating-scale" id="q1-scale" role="radiogroup" aria-label="Overall workshop rating">
+          <button type="button" class="rating-btn" data-value="1"><span class="num">1</span><span class="lbl">Poor</span></button>
+          <button type="button" class="rating-btn" data-value="2"><span class="num">2</span><span class="lbl">Fair</span></button>
+          <button type="button" class="rating-btn" data-value="3"><span class="num">3</span><span class="lbl">Good</span></button>
+          <button type="button" class="rating-btn" data-value="4"><span class="num">4</span><span class="lbl">Very Good</span></button>
+          <button type="button" class="rating-btn" data-value="5"><span class="num">5</span><span class="lbl">Excellent</span></button>
+        </div>
+        <span class="question-help" id="q1-error" style="color:var(--fta-danger);display:none;margin-top:8px;">Please rate the workshop overall before submitting.</span>
+      </div>
+
+      <div class="question">
+        <label class="question-label">Q2. Which session was most valuable to you?</label>
+        <div class="option-list" id="q2-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+
+      <div class="question">
+        <label class="question-label">Q3. Rate each session you attended</label>
+        <span class="question-help">Tap "Didn't Attend" for any session you missed.</span>
+        <div id="q3-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Format & Delivery -->
+    <section class="q-section">
+      <h2>Format &amp; Delivery</h2>
+
+      <div class="question">
+        <label class="question-label">Q4. Which workshop format do you prefer?</label>
+        <div class="option-list" id="q4-list"></div>
+      </div>
+
+      <div class="question">
+        <label class="question-label">Q5. Would you recommend this workshop to a colleague in tribal transit?</label>
+        <div class="pill-group" id="q5-pills">
+          <button type="button" class="pill" data-value="yes">Yes</button>
+          <button type="button" class="pill" data-value="maybe">Maybe</button>
+          <button type="button" class="pill" data-value="no">No</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Future Workshops -->
+    <section class="q-section">
+      <h2>Future Workshops</h2>
+
+      <div class="question">
+        <label class="question-label">Q6. What topics would you like to see in future workshops?</label>
+        <span class="question-help">Select all that apply.</span>
+        <div class="option-list" id="q6-list"></div>
+        <input type="text" id="q6-other" class="other-input" placeholder="Please specify other topic" style="display:none;">
+      </div>
+    </section>
+
+    <!-- Open Feedback -->
+    <section class="q-section">
+      <h2>Open Feedback</h2>
+
+      <div class="question">
+        <label class="question-label" for="f-q7">Q7. What was the most useful thing you learned or took away from this workshop?</label>
+        <textarea id="f-q7" name="q7_most_useful" rows="4" placeholder="What will you bring back to your program?"></textarea>
+      </div>
+
+      <div class="question">
+        <label class="question-label" for="f-q8">Q8. What could be improved for future workshops?</label>
+        <textarea id="f-q8" name="q8_improvement" rows="3" placeholder="Format, content, pacing, anything..."></textarea>
+      </div>
+
+      <div class="question">
+        <label class="question-label" for="f-q9">Q9. Any additional comments for the FTA Region 10 team?</label>
+        <textarea id="f-q9" name="q9_comments" rows="3"></textarea>
+      </div>
+    </section>
+
+    <div class="submit-wrap">
+      <div class="error-banner" id="submit-error">There was a problem submitting your response. Please try again.</div>
+      <button type="submit" class="submit" id="submit-btn">Submit Feedback</button>
+    </div>
+  </form>
+
+  <div class="confirmation" id="confirmation" role="status" aria-live="polite">
+    <div class="check-circle" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><polyline points="4 12.5 10 18.5 20 6.5"/></svg>
+    </div>
+    <h2>Thank you for your feedback!</h2>
+    <p>Your responses have been recorded and will help shape future FTA workshops.</p>
+    <p class="muted">You may close this page.</p>
+  </div>
+</main>
+
+<footer class="bar" style="margin-top:40px;">
+  <div class="bar-inner" style="justify-content:center;text-align:center;">
+    <span>Federal Transit Administration · FY 2026 Tribal Transit Program Workshop · Region 10</span>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+  const SUPABASE_URL = 'https://bbecyvxclqvfybyzfuce.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJiZWN5dnhjbHF2ZnlieXpmdWNlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDA0MTMsImV4cCI6MjA5MjM3NjQxM30.6yuUrrt9y74XxeOKkC6aXs8ECDX-XKo_Pb9OqXCrU4s';
+  const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // ── Session definitions (keys MUST match dashboard.html) ──
+  const SESSIONS = [
+    { key: 'ttp_overview',            label: 'TTP Background & Program Overview',        presenter: 'Maxine Marshall' },
+    { key: 'trams',                   label: 'TrAMS Training',                            presenter: 'Sydney Dratel' },
+    { key: 'period_of_availability',  label: 'Period of Availability for FTA Awards',     presenter: 'Sydney Dratel' },
+    { key: 'echo',                    label: 'ECHO User Training',                        presenter: 'Abhishek Koirala' },
+    { key: 'procurement_fta',         label: 'FTA Procurement Training',                  presenter: 'Maxine Marshall' },
+    { key: 'procurement_nrtap',       label: 'NRTAP Procurement Pro Training',            presenter: 'Al Benedict' },
+    { key: 'nepa',                    label: 'NEPA Requirements',                         presenter: 'Barney Remington' },
+    { key: 'disposition',             label: 'Facilitated Discussion: Disposition',       presenter: 'Misti Epps & Karthik Murthy' }
+  ];
+
+  // Q2 list includes Success Stories but is NOT a Q3 session (no individual rating)
+  const Q2_OPTIONS = [
+    ...SESSIONS.map(s => ({ key: s.key, label: `${s.label} — ${s.presenter}` })),
+    { key: 'success_stories', label: 'Tribal Transit Success Stories' }
+  ];
+
+  const Q4_OPTIONS = [
+    { key: 'virtual',      label: 'Virtual (like this workshop)' },
+    { key: 'in_person',    label: 'In-person' },
+    { key: 'hybrid',       label: 'Hybrid (virtual + in-person)' },
+    { key: 'no_preference', label: 'No preference' }
+  ];
+
+  const Q6_OPTIONS = [
+    { key: 'grant_writing',      label: 'Grant writing & application best practices' },
+    { key: 'financial_mgmt',     label: 'Financial management & closeout reporting' },
+    { key: 'vehicle_procurement', label: 'Vehicle procurement & fleet management' },
+    { key: 'safety_dac',         label: 'Safety planning & drug/alcohol compliance' },
+    { key: 'ada',                label: 'ADA compliance & accessibility' },
+    { key: 'ntd',                label: 'NTD reporting & data collection' },
+    { key: 'electrification',    label: 'Fleet electrification & Low-No programs' },
+    { key: 'state_dots',         label: 'Coordinating with state DOTs' },
+    { key: 'workforce',          label: 'Driver recruitment & workforce development' },
+    { key: 'nemt',               label: 'Non-Emergency Medical Transportation (NEMT)' },
+    { key: 'other',              label: 'Other' }
+  ];
+
+  // ── State ──
+  const state = {
+    q1: null,
+    q2: null,
+    q3: {},
+    q4: null,
+    q5: null,
+    q6: new Set()
+  };
+
+  // ── Render Q2 (radios) ──
+  const q2List = document.getElementById('q2-list');
+  Q2_OPTIONS.forEach(opt => {
+    const label = document.createElement('label');
+    label.className = 'option';
+    label.innerHTML = `
+      <input type="radio" name="q2" value="${opt.key}">
+      <span class="option-text">${opt.label}</span>
+    `;
+    const input = label.querySelector('input');
+    input.addEventListener('change', () => {
+      document.querySelectorAll('#q2-list .option').forEach(o => o.classList.remove('selected'));
+      label.classList.add('selected');
+      state.q2 = opt.key;
+    });
+    q2List.appendChild(label);
+  });
+
+  // ── Render Q3 (session rating cards) ──
+  const q3List = document.getElementById('q3-list');
+  SESSIONS.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'session-card';
+    card.innerHTML = `
+      <div class="session-name">${s.label}</div>
+      <div class="session-controls" data-session="${s.key}">
+        <button type="button" class="session-btn" data-val="1">1</button>
+        <button type="button" class="session-btn" data-val="2">2</button>
+        <button type="button" class="session-btn" data-val="3">3</button>
+        <button type="button" class="session-btn" data-val="4">4</button>
+        <button type="button" class="session-btn" data-val="5">5</button>
+        <button type="button" class="session-btn na" data-val="na">Didn't Attend</button>
+      </div>
+    `;
+    q3List.appendChild(card);
+
+    const controls = card.querySelector('.session-controls');
+    controls.querySelectorAll('.session-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        controls.querySelectorAll('.session-btn').forEach(b => b.classList.remove('selected'));
+        btn.classList.add('selected');
+        const v = btn.dataset.val;
+        state.q3[s.key] = (v === 'na') ? null : parseInt(v, 10);
+      });
+    });
+  });
+
+  // ── Q1 rating ──
+  const q1Scale = document.getElementById('q1-scale');
+  q1Scale.querySelectorAll('.rating-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      q1Scale.querySelectorAll('.rating-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      state.q1 = parseInt(btn.dataset.value, 10);
+      q1Scale.classList.remove('error');
+      document.getElementById('q1-error').style.display = 'none';
+    });
+  });
+
+  // ── Render Q4 (radios) ──
+  const q4List = document.getElementById('q4-list');
+  Q4_OPTIONS.forEach(opt => {
+    const label = document.createElement('label');
+    label.className = 'option';
+    label.innerHTML = `
+      <input type="radio" name="q4" value="${opt.key}">
+      <span class="option-text">${opt.label}</span>
+    `;
+    label.querySelector('input').addEventListener('change', () => {
+      document.querySelectorAll('#q4-list .option').forEach(o => o.classList.remove('selected'));
+      label.classList.add('selected');
+      state.q4 = opt.key;
+    });
+    q4List.appendChild(label);
+  });
+
+  // ── Q5 pills ──
+  document.querySelectorAll('#q5-pills .pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      document.querySelectorAll('#q5-pills .pill').forEach(p => p.classList.remove('selected'));
+      pill.classList.add('selected');
+      state.q5 = pill.dataset.value;
+    });
+  });
+
+  // ── Render Q6 (checkboxes) ──
+  const q6List = document.getElementById('q6-list');
+  const q6Other = document.getElementById('q6-other');
+  Q6_OPTIONS.forEach(opt => {
+    const label = document.createElement('label');
+    label.className = 'option';
+    label.innerHTML = `
+      <input type="checkbox" value="${opt.key}">
+      <span class="option-text">${opt.label}</span>
+    `;
+    const input = label.querySelector('input');
+    input.addEventListener('change', () => {
+      if (input.checked) {
+        state.q6.add(opt.key);
+        label.classList.add('selected');
+      } else {
+        state.q6.delete(opt.key);
+        label.classList.remove('selected');
+      }
+      if (opt.key === 'other') {
+        q6Other.style.display = input.checked ? 'block' : 'none';
+        if (!input.checked) q6Other.value = '';
+      }
+    });
+    q6List.appendChild(label);
+  });
+
+  // ── Submit ──
+  const form = document.getElementById('survey-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const errorBanner = document.getElementById('submit-error');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    errorBanner.classList.remove('show');
+
+    // Validate Q1 (only required field)
+    if (state.q1 == null) {
+      q1Scale.classList.add('error');
+      document.getElementById('q1-error').style.display = 'block';
+      document.getElementById('q1-wrap').scrollIntoView({ behavior: 'smooth', block: 'center' });
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="spinner"></span>Submitting...';
+
+    const payload = {
+      name:            document.getElementById('f-name').value.trim() || null,
+      tribe_org:       document.getElementById('f-tribe').value.trim() || null,
+      role:            document.getElementById('f-role').value.trim() || null,
+      q1_overall:      state.q1,
+      q2_most_valuable: state.q2,
+      q3_session_ratings: Object.keys(state.q3).length ? state.q3 : null,
+      q4_format:       state.q4,
+      q5_recommend:    state.q5,
+      q6_future_topics: state.q6.size ? Array.from(state.q6) : null,
+      q6_future_topics_other: (state.q6.has('other') && q6Other.value.trim()) ? q6Other.value.trim() : null,
+      q7_most_useful:  document.getElementById('f-q7').value.trim() || null,
+      q8_improvement:  document.getElementById('f-q8').value.trim() || null,
+      q9_comments:     document.getElementById('f-q9').value.trim() || null
+    };
+
+    try {
+      const { error } = await sb.from('ttp_survey_responses').insert(payload);
+      if (error) throw error;
+
+      form.style.display = 'none';
+      document.getElementById('confirmation').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      console.error('Submission failed:', err);
+      errorBanner.classList.add('show');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = 'Submit Feedback';
+    }
+  });
+</script>
+</body>
+</html>
